@@ -10,8 +10,8 @@ RUN mkdir /var/wordpress-tools
 ADD ./tools/install.sh /var/wordpress-tools/install.sh
 
 # add www-data user
-RUN adduser -D www-data-user
-RUN addgroup www-data-user www-data
+RUN adduser -u 82 -D -S -G www-data www-data
+
 RUN ["sh", "/var/wordpress-tools/install.sh"]
 
 # configuring wordpess

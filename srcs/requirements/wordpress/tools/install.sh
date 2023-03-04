@@ -8,7 +8,7 @@ ADMIN_PASSWD=Test@2023@2024
 
 
 
-apk upgrade
+apk update && apk upgrade
 
 # adding more repositories to /etc/apk/repositories
 
@@ -35,21 +35,24 @@ if [ ! -f /usr/local/bin/wp ]; then
 	chmod +x /usr/local/bin/wp
 fi
 
-
+# remove old wordpress directory
 if [ -d /var/www/wordpress ]; then
         rm -rf /var/www/wordpress
 fi
 # create wordpress directory
 mkdir -p /var/www/wordpress
-# adding user and group www-data
-chown -R www-data-user:www-data /var/www
+# adding www-data user as te wordpress directory owner
+
+chown -R www-data:www-data /var/www/wordpress
+
 # Downloading Wordpress using the wordpress CLI
 echo -e "Downloading Wordpress core "
-su -s /bin/sh -c 'wp --path=/var/www/wordpress core download' www-data-user
+su -s /bin/sh -c 'wp --path=/var/www/wordpress core download' www-data
+
 echo "Installing wordpress core "
+su -s /bin/sh -c "wp core install --url=$SITE_URL --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWD" www-data
 
-su -s /bin/sh -c "wp core install --url=$SITE_URL --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWD"
-
+# changing permissions for wordpress 
 chmod g+w /var/www/wordpress/wp-content
 chmod -R g+w /var/www/wordpress/wp-content/themes
 chmod -R g+w /var/www/wordpress/wp-content/plugins
