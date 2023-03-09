@@ -15,7 +15,7 @@ ENV NGINX_SCRIPT_DEST="/run/nginx/"
 
 RUN apk update && apk upgrade
 # installing extra packages
-RUN apk update && apk add openssl curl ca-certificates
+RUN apk update && apk add openssl curl ca-certificates openrc
 
 # set up the apk repository for stable nginx packages
 
@@ -46,9 +46,15 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 
 
+
+# testing
 RUN mkdir ${SRV_RESOURCE} ${NGINX_RUN}
 ADD ${NGINX_SCRIPT_SRC} ${NGINX_SCRIPT_DEST}
 ADD index.html ${SRV_RESOURCE}
+RUN mkdir /srv/wordpess 
+RUN mkdir /srv/html/secure 
+ADD ./secure.html /srv/html/secure/
+ADD ./index.php /srv/wordpress/index.php
 COPY ${DEFAULT_CONF} ${DEFAULT_CONF_PATH}
 
 
@@ -57,7 +63,7 @@ COPY ${DEFAULT_CONF} ${DEFAULT_CONF_PATH}
 CMD ["-g", "daemon  off;"]
 
 EXPOSE 80
-
+EXPOSE 443
 ENTRYPOINT ["nginx"]
 
 # EXPOSE 8080

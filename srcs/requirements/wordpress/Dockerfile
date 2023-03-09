@@ -1,4 +1,5 @@
 # wordpress dockerfile
+
 ARG VERSION=3.17.1
 FROM alpine:${VERSION}
 
@@ -19,3 +20,5 @@ RUN ["sh", "/var/wordpress-tools/install.sh"]
 WORKDIR /var/www/wordpress 
 ADD ./tools/configure.sh /var/wordpress-tools/configure.sh
 RUN ["sh" , "/var/wordpress-tools/configure.sh"]
+
+EXPOSE 9000 

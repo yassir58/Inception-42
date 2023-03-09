@@ -21,7 +21,7 @@ echo -e "Installing php dependencies ..."
 apk update && apk add php php-fpm php-mysqli php-curl php-mbstring php-xml php-gd php-zip php-openssl php-phar 
 
 echo -e "Installing extra packages ... "
-apk update && apk add wget mysql mysql-client  curl coreutils openrc
+apk update && apk add wget mysql mysql-client curl coreutils openrc
 
 /home/gigachad/Inception-42/srcs/requirements/wordpress/tools
 echo -e "Downloading the latset wordpress source files "
