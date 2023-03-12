@@ -57,7 +57,7 @@ server {
     }
 
     location ~ \.php$ {
-        root           /srv/html/wordpress;
+        root           /var/www/wordpress;
         fastcgi_pass   php-fpm:9000;
         fastcgi_index  index.php;
        fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
