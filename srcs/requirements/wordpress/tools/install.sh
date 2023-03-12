@@ -5,23 +5,21 @@ SITE_URL=yelatman.42.ma
 SITE_TITLE=example
 ADMIN_USER=gigachad
 ADMIN_PASSWD=Test@2023@2024
+PHP-VERSION=php
+
+apt-get update && apt-get upgrade
 
 
+echo -e "Installing basic utilities ... "
+apt-get install curl wget gnupg2 ca-certificates lsb-release apt-transport-https  \
+net-tools -y
 
-apk update && apk upgrade
+echo -e "Installing php extensions ..."
+# installing php extensions
 
-# adding more repositories to /etc/apk/repositories
+apt-get update && apt-get install php php-fpm\
+	php-curl php-json php-mbstring php-mysql php-zip -y
 
-echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
-
-
-echo -e "Installing php dependencies ..."
-
-
-apk update && apk add php php-fpm php-mysqli php-curl php-mbstring php-xml php-gd php-zip php-openssl php-phar 
-
-echo -e "Installing extra packages ... "
-apk update && apk add wget mysql mysql-client curl coreutils openrc
 
 /home/gigachad/Inception-42/srcs/requirements/wordpress/tools
 echo -e "Downloading the latset wordpress source files "
