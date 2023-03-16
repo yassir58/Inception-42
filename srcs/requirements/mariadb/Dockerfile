@@ -6,20 +6,18 @@ FROM debian:${VERSION}
 
 # installing basic utilities
 RUN apt-get update && apt-get upgrade
-RUN apt-get update && apt-get install wget curl coreutils openrc -y
+RUN apt-get update && apt-get install wget curl coreutils  gnupg2 ca-certificates lsb-release apt-transport-https -y
 
 # installing mariadb
 
-RUN apt-get update && apt-get install mysql mysql-client -y
+RUN apt-get update && apt-get install mariadb-server -y
+# starting the main mariaDb service
 
-# changing the owner of the data directory
+RUN mkdir -p /var/run/scripts 
 RUN chown -R mysql:mysql /var/lib/mysql
+RUN chmod -R 770 /var/lib/mysql
+ADD ./tools/entrypoint.sh /var/run/scripts/
+ADD ./tools/setup.sql /var/run/scripts/
+EXPOSE 3306
 
-# initializing the main mariaDb database
-RUN mkdir /var/myscripts
-ADD ./tools/configure.sh /var/myscripts/ 
-RUN ["sh", "./tools/configure.sh"]
-
-# startign the main mariaDb service
-
-RUN /etc/init.d/mariadb start
+ENTRYPOINT ["/bin/sh", "/var/run/scripts/entrypoint.sh"]

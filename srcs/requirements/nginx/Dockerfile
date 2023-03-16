@@ -23,7 +23,7 @@ RUN curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.
 RUN openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout
 RUN mv /tmp/nginx_signing.rsa.pub /etc/apt/trusted.gpg.d/
 
-# add www-data user
+# add www-  user
 RUN deluser www-data && addgroup www-data
 RUN adduser --system --uid 82 --no-create-home --ingroup www-data --disabled-login --disabled-password www-data
 

@@ -27,18 +27,17 @@ RUN ["sh", "/var/wordpress-tools/install.sh"]
 # configuring wordpess
 
 WORKDIR /var/www/wordpress 
-ADD ./tools/configure.sh /var/wordpress-tools/configure.sh
+ADD ./tools/entrypoint.sh /var/wordpress-tools/entrypoint.sh
 # ADD ./tools/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
-RUN ["sh" , "/var/wordpress-tools/configure.sh"]
+
 
 # configuring php-fpm
 
-RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini && \
-    sed -i "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 9000/" /etc/php/7.3/fpm/pool.d/www.conf
 
 
+RUN mkdir /var/www/test
+ADD ./tools/test/index.php /var/www/test/
 
+ENTRYPOINT ["/bin/sh", "/var/wordpress-tools/entrypoint.sh"]
 
-ENTRYPOINT ["php-fpm7.3"]
-
-CMD ["-F"]
+# CMD ["-F"]

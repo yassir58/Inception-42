@@ -1,0 +1,41 @@
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      - my-bridge-network
+    # volumes:
+    #   - wordpress-database:/var/lib/mysql
+  php-fpm:
+    container_name: php-fpm
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress-files:/var/www/wordpress
+      # - wordpress-files:/var/run/worpdress chown www-data:www-data /var/run/worpdress -R 
+    ports:
+      - "9000:9000"
+    networks:
+      - my-bridge-network
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      - php-fpm
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - my-bridge-network
+    volumes:
+        - wordpress-files:/var/www/wordpress
+    #   - wordpress-files:/var/run/worpdress chown www-data:www-data /var/run/worpdress -R 
+
+networks:
+  my-bridge-network:
+volumes:
+  wordpress-files:
+  wordpress-database:

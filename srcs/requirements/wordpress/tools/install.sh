@@ -12,7 +12,7 @@ apt-get update && apt-get upgrade
 
 echo -e "Installing basic utilities ... "
 apt-get install curl wget gnupg2 ca-certificates lsb-release apt-transport-https  \
-net-tools -y
+net-tools  default-mysql-client -y
 
 echo -e "Installing php extensions ..."
 # installing php extensions

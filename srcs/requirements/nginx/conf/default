@@ -1,3 +1,5 @@
+
+
 server {
     listen       80;
     server_name  localhost;
@@ -42,7 +44,11 @@ server {
     #}
 }
 
+default_type  application/octet-stream;
+include       /etc/nginx/mime.types;
+
 server {
+
     listen  443 ssl;
     listen [::]:443 ssl;
     server_name host;
@@ -52,16 +58,22 @@ server {
     ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
     root /srv/html/secure ;
 
-    location / {
-        index secure.html ;
+    location /wordpress {
+        root /var/www/ ;
+        index index.php;
     }
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
 
     location ~ \.php$ {
         root           /var/www/wordpress;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
         fastcgi_pass   php-fpm:9000;
         fastcgi_index  index.php;
-       fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
-       include        fastcgi_params;
-       fastcgi_param PATH_INFO $fastcgi_path_info;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME $fastcgi_script_name;
     }
 }
