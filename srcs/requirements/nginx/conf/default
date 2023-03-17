@@ -44,28 +44,23 @@ server {
     #}
 }
 
-default_type  application/octet-stream;
-include       /etc/nginx/mime.types;
+
 
 server {
 
     listen  443 ssl;
     listen [::]:443 ssl;
-    server_name host;
+    server_name yelatman.42.fr;
     ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt ;
     ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key ;
     ssl_protocols TLSv1.3;
     ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
-    root /srv/html/secure ;
+    root           /var/www/wordpress;
+    index index.php index.html index.htm;
 
-    location /wordpress {
-        root /var/www/ ;
-        index index.php;
-    }
     location / {
-        try_files $uri $uri/ /index.php?$args;
+        try_files $uri $uri/ =404;
     }
-
 
     location ~ \.php$ {
         root           /var/www/wordpress;

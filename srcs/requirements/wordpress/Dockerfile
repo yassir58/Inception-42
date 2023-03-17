@@ -38,6 +38,7 @@ ADD ./tools/entrypoint.sh /var/wordpress-tools/entrypoint.sh
 RUN mkdir /var/www/test
 ADD ./tools/test/index.php /var/www/test/
 
+
 ENTRYPOINT ["/bin/sh", "/var/wordpress-tools/entrypoint.sh"]
 
 # CMD ["-F"]

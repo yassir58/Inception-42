@@ -1,10 +1,7 @@
 # script variable definition
 WP_CLI_VERS=2.7.1
 WORDPRESS_SOURCE_FILES="http://wordpress.org/latest.tar.gz"
-SITE_URL=yelatman.42.ma
-SITE_TITLE=example
-ADMIN_USER=gigachad
-ADMIN_PASSWD=Test@2023@2024
+
 PHP-VERSION=php
 
 apt-get update && apt-get upgrade
@@ -46,9 +43,6 @@ chown -R www-data:www-data /var/www/wordpress
 # Downloading Wordpress using the wordpress CLI
 echo -e "Downloading Wordpress core "
 su -s /bin/sh -c 'wp --path=/var/www/wordpress core download' www-data
-
-echo "Installing wordpress core "
-su -s /bin/sh -c "wp core install --url=$SITE_URL --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWD" www-data
 
 # changing permissions for wordpress 
 chmod g+w /var/www/wordpress/wp-content
