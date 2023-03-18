@@ -6,10 +6,15 @@ services:
       - "3306:3306"
     networks:
       - my-bridge-network
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD} 
     # volumes:
     #   - wordpress-database:/var/lib/mysql
-  php-fpm:
-    container_name: php-fpm
+  wordpress:
+    container_name: wordpress
     build: ./requirements/wordpress
     depends_on:
       - mariadb
@@ -20,11 +25,16 @@ services:
       - "9000:9000"
     networks:
       - my-bridge-network
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
   nginx:
     container_name: nginx
     build: ./requirements/nginx
     depends_on:
-      - php-fpm
+      - wordpress
     ports:
       - "443:443"
       - "80:80"

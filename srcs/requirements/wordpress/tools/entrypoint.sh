@@ -5,10 +5,10 @@
 
 
 DB_NAME="wordpress"
-DB_USER="yelatman"
-DB_PASSWORD="test@1234@test"
-DB_HOST="mariadb"
-SITE_URL=https://localhost
+MYSQL_USER="yelatman"
+MYSQL_PASSWORD="test@1234@test"
+MYSQL_HOST="mariadb"
+SITE_URL=https://10.11.100.38
 SITE_TITLE=example
 ADMIN_USER=gigachad
 ADMIN_PASSWD=Test@2023@2024
@@ -26,13 +26,13 @@ ADMIN_EMAIL=elatmaniyassir3@gmail.com
 
 #  --extra-php='<?php define( 'WP_SITEURL', 'https://' . $_SERVER['HTTP_HOST'] . '/var/www/wordpress' ); ?>' www-data
 
-until mysql -h $DB_HOST -u $DB_USER -p$DB_PASSWORD -e "SELECT 1"; do
+until mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT 1"; do
   >&2 echo "MariaDB is unavailable - sleeping"
   sleep 1
 done
 
 echo "Creating wordpress config"
-su -s /bin/sh -c "wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbhost=$DB_HOST" www-data
+su -s /bin/sh -c "wp config create --dbname=$DB_NAME --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbhost=$MYSQL_HOST" www-data
 
 su -s /bin/sh -c "wp config set FS_METHOD direct --type=constant" www-data
 su -s /bin/sh -c "wp config set FS_CHMOD_DIR \"0755 & ~umask()\" --type=constant" www-data
@@ -41,7 +41,7 @@ echo "Installing wordpress core "
 su -s /bin/sh -c "wp core install --url=$SITE_URL --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWD \
     --admin_email=$ADMIN_EMAIL" www-data
 
-su -s /bin/sh -c "wp user create test  ilyastest@gmail.com --role=author --user_pass=$DB_PASSWORD --allow-root" www-data
+su -s /bin/sh -c "wp user create test  ilyastest@gmail.com --role=author --user_pass=$MYSQL_PASSWORD --allow-root" www-data
 
 # configure php-fpm
 
