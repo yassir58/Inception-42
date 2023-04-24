@@ -4,32 +4,50 @@ services:
     container_name: mariadb
     ports:
       - "3306:3306"
+    image: mariadb
     networks:
       - my-bridge-network
     environment:
       - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD} 
-    # volumes:
-    #   - wordpress-database:/var/lib/mysql
+    volumes:
+      - wordpress-database:/var/lib/mysql
+    restart: always
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
     depends_on:
       - mariadb
+      - redis
     volumes:
       - wordpress-files:/var/www/wordpress
-      # - wordpress-files:/var/run/worpdress chown www-data:www-data /var/run/worpdress -R 
     ports:
       - "9000:9000"
+    image: wordpress
     networks:
       - my-bridge-network
     environment:
       - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_USER=${WORDPRESS_USER}
+      - WORDPRESS_USER_EMAIL=${WORDPRESS_USER_EMAIL}
+      - WORDPRESS_USER_PASSWORD =${WORDPRESS_USER_PASSWORD}
+      - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
+      - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+      - SITE_TITLE=${SITE_TITLE}
+      - SITE_URL=${SITE_URL}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
+      - WP_REDIS_HOST=${WP_REDIS_HOST}
+      - WP_REDIS_PORT=${WP_REDIS_PORT}
+      - WP_REDIS_TIMEOUT=${WP_REDIS_TIMEOUT}
+      - WP_REDIS_READ_TIMEOUT=${WP_REDIS_READ_TIMEOUT}
+      - WP_REDIS_DATABASE=${WP_REDIS_DATABASE}
+      - WP_CACHE=${WP_CACHE}
+    restart: always
   nginx:
     container_name: nginx
     build: ./requirements/nginx
@@ -38,14 +56,34 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    image: nginx
     networks:
       - my-bridge-network
     volumes:
         - wordpress-files:/var/www/wordpress
-    #   - wordpress-files:/var/run/worpdress chown www-data:www-data /var/run/worpdress -R 
+    restart: always
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis
+    ports:
+      - "6379:6379"
+    image: redis
+    networks:
+      - my-bridge-network
 
 networks:
   my-bridge-network:
 volumes:
-  wordpress-files:
   wordpress-database:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/yelatman/data/wp-database
+  wordpress-files:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/yelatman/data/wp-files
+      

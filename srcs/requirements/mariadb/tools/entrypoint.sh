@@ -1,6 +1,4 @@
-
-ROOT_PASS=test@123@test
-
+#!/bin/bash
 # install mariadb database 
 mysql_install_db  --user=mysql --skip-test-db
 
@@ -13,11 +11,13 @@ sed -i "${N}s/127.0.0.1/0.0.0.0/g" $MARIADB_SERVER_CONF
 service mysql start
 
 # # # setup mraidb database
-# mysql -u root  < /var/run/scripts/setup.sql
-mysql -u root -p$ROOT_PASS -e "CREATE DATABASE wordpress;"
-mysql -u root -p$ROOT_PASS -e "CREATE USER '$MYSQL_HOST'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-mysql -u root -p$ROOT_PASS -e "GRANT ALL PRIVILEGES ON wordpress.* TO '$MYSQL_HOST'@'%';"
-mysql -u root -p$ROOT_PASS -e "FLUSH PRIVILEGES;"
+
+mysql -u root -e "UPDATE mysql.user SET authentication_string = PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User = 'root';"
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS wordpress;"
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON wordpress.* TO '$MYSQL_USER'@'%';"
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
+
 service mysql stop
 # starting the mariaBd daemon
-cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql'
+exec "$@"

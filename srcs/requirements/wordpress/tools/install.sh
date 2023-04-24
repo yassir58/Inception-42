@@ -4,22 +4,10 @@ WORDPRESS_SOURCE_FILES="http://wordpress.org/latest.tar.gz"
 
 PHP-VERSION=php
 
-apt-get update && apt-get upgrade
-
-
 echo -e "Installing basic utilities ... "
-apt-get install curl wget gnupg2 ca-certificates lsb-release apt-transport-https  \
-net-tools  default-mysql-client -y
-
-echo -e "Installing php extensions ..."
-# installing php extensions
-
-apt-get update && apt-get install php php-fpm\
+apt-get update -y && apt-get install curl sendmail default-mysql-client php php-fpm \
 	php-curl php-json php-mbstring php-mysql php-zip -y
 
-
-/home/gigachad/Inception-42/srcs/requirements/wordpress/tools
-echo -e "Downloading the latset wordpress source files "
 
 if [ ! -f /usr/local/bin/wp ]; then
 	echo -e "Installing wordpress CLI "
@@ -45,6 +33,4 @@ echo -e "Downloading Wordpress core "
 su -s /bin/sh -c 'wp --path=/var/www/wordpress core download' www-data
 
 # changing permissions for wordpress 
-chmod g+w /var/www/wordpress/wp-content
-chmod -R g+w /var/www/wordpress/wp-content/themes
-chmod -R g+w /var/www/wordpress/wp-content/plugins
+chmod -R 755 /var/www/wordpress
