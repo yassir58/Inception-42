@@ -1,0 +1,5 @@
+FROM debian:buster
+
+RUN apt-get install curl php mysql
+
+ENTRYPOINT 
