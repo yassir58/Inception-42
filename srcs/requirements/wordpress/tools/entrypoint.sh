@@ -29,3 +29,4 @@ wp redis enable --allow-root
 # starting php-fpm server in forground
 exec "$@"
    
+   

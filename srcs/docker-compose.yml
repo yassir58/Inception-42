@@ -55,7 +55,6 @@ services:
       - wordpress
     ports:
       - "443:443"
-      - "80:80"
     image: nginx
     networks:
       - my-bridge-network
@@ -70,7 +69,20 @@ services:
     image: redis
     networks:
       - my-bridge-network
-
+  static-website:
+    container_name: static-website
+    build: ./requirements/bonus/static-website
+    ports:
+     - "8080:8080"
+    image: static-website
+    restart: always
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer
+    image: adminer
+    ports:
+     - "8000:8000"
+    restart: always
 networks:
   my-bridge-network:
 volumes:
@@ -86,4 +98,5 @@ volumes:
       type: 'none'
       o: 'bind'
       device: /home/yelatman/data/wp-files
+      
       

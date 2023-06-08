@@ -2,8 +2,6 @@
 
 ARG VERSION=buster
 FROM debian:${VERSION}
-
-
 RUN mkdir /var/wordpress-tools
 ADD ./tools/install.sh /var/wordpress-tools/install.sh
 

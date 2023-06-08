@@ -23,8 +23,6 @@ RUN curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.
 COPY ${DEFAULT_CONF} ${DEFAULT_CONF_PATH}
 
 CMD ["-g", "daemon  off;"]
-
-EXPOSE 80
-EXPOSE 443
 ENTRYPOINT ["nginx"]
+
 

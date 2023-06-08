@@ -10,8 +10,6 @@ RUN mkdir -p /var/run/tools \
     && chmod -R 770 /var/lib/mysql
 ADD ./tools/entrypoint.sh /var/run/scripts/
 
-EXPOSE 3306
-
 RUN chmod +x /var/run/scripts/entrypoint.sh
 ENTRYPOINT ["/var/run/scripts/entrypoint.sh"]
 
