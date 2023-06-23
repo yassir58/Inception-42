@@ -1,8 +1,0 @@
-FROM debian:buster
-RUN apt-get update && apt-get install curl build-essential libssl-dev -y
-COPY ./tools/entrypoint.sh /tmp/entrypoint.sh
-ADD ./tools/static/ /tmp/static/
-WORKDIR /tmp/static
-RUN chmod +x /tmp/entrypoint.sh
-ENTRYPOINT ["/tmp/entrypoint.sh"]
-CMD ["node", "index.js"]

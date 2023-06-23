@@ -1,8 +1,7 @@
 FROM debian:buster
 
-RUN apt-get update && apt-get install -y apache2  php php-curl libapache2-mod-php php-cli php-mysql php-gd php-fpm 
-
-ADD ./tools/entrypoint.sh /tmp/
-RUN chmod +x /tmp/entrypoint.sh
-ENTRYPOINT ["/tmp/entrypoint.sh"]
-CMD ["service apache2 restart"]
+RUN apt-get update && apt-get install -y php php-mysql adminer wget
+RUN mkdir -p /var/www/adminer
+WORKDIR /var/www/adminer
+RUN wget "https://www.adminer.org/latest.php" && mv latest.php adminer.php
+CMD ["php","-S","0.0.0.0:8000","-t","/var/www/adminer"]
