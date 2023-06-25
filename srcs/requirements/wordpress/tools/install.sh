@@ -1,14 +1,14 @@
 # script variable definition
 WP_CLI_VERS=2.7.1
 WORDPRESS_SOURCE_FILES="http://wordpress.org/latest.tar.gz"
-
 PHP-VERSION=php
+
 
 echo -e "Installing basic utilities ... "
 apt-get update -y && apt-get install curl sendmail default-mysql-client php php-fpm \
 	php-curl php-json php-mbstring php-mysql php-zip -y
 
-
+# downloading wordpress CLI
 if [ ! -f /usr/local/bin/wp ]; then
 	echo -e "Installing wordpress CLI "
 	 curl -v --retry 6 -Ls https://github.com/wp-cli/wp-cli/releases/download/v$WP_CLI_VERS/wp-cli-$WP_CLI_VERS.phar \
@@ -22,6 +22,7 @@ fi
 if [ -d /var/www/wordpress ]; then
         rm -rf /var/www/wordpress
 fi
+
 # create wordpress directory
 mkdir -p /var/www/wordpress
 # adding www-data user as te wordpress directory owner

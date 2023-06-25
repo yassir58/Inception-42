@@ -7,9 +7,10 @@ until mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT 1"; do
   sleep 1
 done
 
+echo "database name is $DATABASE_NAME"
 
 # create the wp-config.php file 
-su -s /bin/sh -c "wp config create --dbname=$DATABASE_NAME --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbhost=$MYSQL_HOST" www-data
+wp config create --dbname=$DATABASE_NAME --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbhost=$MYSQL_HOST --allow-root
 # set the redis service host
 wp config set WP_REDIS_HOST 'redis' --allow-root
 # set the redis service port 
@@ -28,5 +29,4 @@ wp redis enable --allow-root
 
 # starting php-fpm server in forground
 exec "$@"
-   
    

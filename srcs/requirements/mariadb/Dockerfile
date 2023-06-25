@@ -1,16 +1,8 @@
 # mariaDb dockerfile
-
-ARG VERSION=buster
-FROM debian:${VERSION}
+FROM debian:buster
 
 RUN apt-get update && apt-get install curl gnupg2 mariadb-server -y
-
-RUN mkdir -p /var/run/tools \ 
-    && chown -R mysql:mysql /var/lib/mysql \
-    && chmod -R 770 /var/lib/mysql
-ADD ./tools/entrypoint.sh /var/run/scripts/
-
-RUN chmod +x /var/run/scripts/entrypoint.sh
-ENTRYPOINT ["/var/run/scripts/entrypoint.sh"]
-
+ADD ./tools/entrypoint.sh /
+RUN chmod +x //entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["mysqld_safe" , "--datadir=/var/lib/mysql"]

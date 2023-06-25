@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   mariadb:
     build: ./requirements/mariadb
@@ -6,13 +8,11 @@ services:
       - "3306:3306"
     image: mariadb
     networks:
-      - my-bridge-network
-    environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD} 
+      - inception-network
+    env_file:
+      - .env
     volumes:
-      - wordpress-database:/var/lib/mysql
+      - wp-database:/var/lib/mysql
     restart: always
   wordpress:
     container_name: wordpress
@@ -21,32 +21,14 @@ services:
       - mariadb
       - redis
     volumes:
-      - wordpress-files:/var/www/wordpress
+      - wp-files:/var/www/wordpress
     ports:
       - "9000:9000"
     image: wordpress
     networks:
-      - my-bridge-network
-    environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - WORDPRESS_USER=${WORDPRESS_USER}
-      - WORDPRESS_USER_EMAIL=${WORDPRESS_USER_EMAIL}
-      - WORDPRESS_USER_PASSWORD =${WORDPRESS_USER_PASSWORD}
-      - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
-      - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
-      - SITE_TITLE=${SITE_TITLE}
-      - SITE_URL=${SITE_URL}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - MYSQL_HOST=${MYSQL_HOST}
-      - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
-      - WP_REDIS_HOST=${WP_REDIS_HOST}
-      - WP_REDIS_PORT=${WP_REDIS_PORT}
-      - WP_REDIS_TIMEOUT=${WP_REDIS_TIMEOUT}
-      - WP_REDIS_READ_TIMEOUT=${WP_REDIS_READ_TIMEOUT}
-      - WP_REDIS_DATABASE=${WP_REDIS_DATABASE}
-      - WP_CACHE=${WP_CACHE}
+      - inception-network
+    env_file: 
+      - .env
     restart: always
   nginx:
     container_name: nginx
@@ -57,9 +39,9 @@ services:
       - "443:443"
     image: nginx
     networks:
-      - my-bridge-network
+      - inception-network
     volumes:
-        - wordpress-files:/var/www/wordpress
+        - wp-files:/var/www/wordpress
     restart: always
   redis:
     container_name: redis
@@ -68,12 +50,12 @@ services:
       - "6379:6379"
     image: redis
     networks:
-      - my-bridge-network
+      - inception-network
   static-website:
     container_name: static-website
     build: ./requirements/bonus/static-website
     ports:
-     - "8080:8080"
+     - "1234:1234"
     image: static-website
     restart: always
   adminer:
@@ -83,16 +65,52 @@ services:
     ports:
      - "8000:8000"
     restart: always
+    networks:
+      - inception-network
+  cadvisor:
+    container_name: cadvisor
+    build: ./requirements/bonus/cadvisor
+    image: cadvisor-img
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    depends_on:
+      - adminer
+  ftp:
+    container_name: ftp
+    build: ./requirements/bonus/ftp 
+    image: ftp-img
+    ports:
+      - "21:21"
+      - "20:20"
+      - "40000-40005:40000-40005"
+    depends_on:
+      - wordpress
+    env_file:
+      - .env 
+    volumes:
+      - wp-files:/home/ftp-user/ftp-files
+    networks:
+      - inception-network
 networks:
-  my-bridge-network:
+  inception-network:
+    driver: bridge
+    name: inception-network
 volumes:
-  wordpress-database:
+  wp-database:
+    name: wp-database
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: /home/yelatman/data/wp-database
-  wordpress-files:
+  wp-files:
+    name: wp-files
     driver: local
     driver_opts:
       type: 'none'

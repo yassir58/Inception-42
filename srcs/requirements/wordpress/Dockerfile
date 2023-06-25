@@ -1,7 +1,8 @@
 # wordpress dockerfile
 
-ARG VERSION=buster
-FROM debian:${VERSION}
+FROM debian:buster
+
+
 RUN mkdir /var/wordpress-tools
 ADD ./tools/install.sh /var/wordpress-tools/install.sh
 

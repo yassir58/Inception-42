@@ -4,5 +4,5 @@ COPY ./tools/vsftpd.conf /etc/vsftpd.conf
 ADD ./tools/entrypoint.sh /var/run/entrypoint.sh
 RUN chmod +x /var/run/entrypoint.sh
 ENTRYPOINT [ "/var/run/entrypoint.sh" ]
-CMD [ "service", "vsftpd" ,"start" ]
+CMD [ "/usr/sbin/vsftpd" ]
 
