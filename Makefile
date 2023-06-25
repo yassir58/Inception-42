@@ -10,15 +10,15 @@ all: configure up
 
 up:
 	@echo  "${BLUE}starting the project ...${RESET}"
-	docker-compose up --build -d
+	docker-compose -f ./srcs/docker-compose.yml up --build -d
 
 configure:
 	@echo  "${BLUE}configuring the project  ...${RESET}"
-	@bash ./requirements/tools/configure.sh	$(user)
+	@bash ./srcs/requirements/tools/configure.sh	$(user)
 
 rebuild:
 	@echo  "${BLUE}rebuilding the project ...${RESET}"
-	docker-compose build 
+	docker-compose -f ./srcs/docker-compose.yml build 
 
 clean:
 	@echo  "${BLUE}cleaning the project ...${RESET} "
@@ -26,15 +26,15 @@ clean:
 
 down:
 	@echo  "${BLUE}stopping the project ...${RESET} "
-	docker-compose down 
+	docker-compose -f ./srcs/docker-compose.yml down 
 
 start:
 	@echo  "${BLUE}starting the project ...${RESET} "
-	docker-compose start
+	docker-compose -f ./srcs/docker-compose.yml start
 
 stop:
 	@echo  "${BLUE}stopping the project ...${RESET} "
-	docker-compose stop
+	docker-compose -f ./srcs/docker-compose.yml stop
 
 re:down fclean all
 	@echo  "${BLUE}recreating the project ...${RESET} "
