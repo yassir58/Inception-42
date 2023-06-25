@@ -1,9 +1,5 @@
 #! /bin/bash
 
-FTP_USER="ftp-user"
-FTP_PASSWORD="test@123@test"
-
-
 useradd -m "$FTP_USER" 
 echo "$FTP_USER:$FTP_PASSWORD" | chpasswd 
 chown nobody:nogroup /home/$FTP_USER/ftp-files
