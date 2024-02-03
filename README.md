@@ -29,3 +29,6 @@ A project on system administration utilizing Docker containers
    - Documented the setup process and configurations.
    - Provided clear instructions for replication.
    
+ ## to start project
+```bash
+./start.sh
