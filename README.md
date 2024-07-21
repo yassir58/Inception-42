@@ -54,6 +54,8 @@ In summary, while both technologies enable isolated environments for application
    - Documented the setup process and configurations.
    - Provided clear instructions for replication.
    
- ## to start project
+ ## to start project run the following commands
 ```bash
-./start.sh
+cd srcs
+cp env_example .env
+docker compose up --build
