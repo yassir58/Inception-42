@@ -1,4 +1,29 @@
-A project on system administration utilizing Docker containers
+![Alt text](structure.png?raw=true "Title")
+
+# What is Virtualization ?
+Virtualization is the process by which hypervisors partition physical resources into virtual resources, allowing multiple virtual machines (VMs) to run in isolated environments on a single physical server. This technology maximizes resource utilization, improves scalability, and reduces operational costs.
+# what is Containerization ?
+Containerization is a lightweight form of virtualization that involves encapsulating an application and its dependencies into a container. This container can run consistently across various computing environments. Unlike virtual machines, containers share the host operating system's kernel but maintain isolated user spaces, making them more efficient in terms of resource usage. Common containerization platforms include Docker and Kubernetes.
+# What is the difference between containerization and virtualization ?
+### Difference between Containerization and Virtualization
+
+**Virtualization:**
+
+- Virtualization involves creating multiple virtual machines (VMs) on a single physical server using a hypervisor.
+- Each VM runs its own operating system (guest OS) and is isolated from other VMs.
+- VMs are resource-intensive because they require separate instances of the operating system and allocate a fixed amount of resources.
+- Common hypervisors include VMware, Hyper-V, and KVM.
+
+**Containerization:**
+
+- Containerization involves encapsulating an application and its dependencies into a container, which shares the host operating system's kernel.
+- Containers run in isolated user spaces but do not require separate operating systems.
+- Containers are lightweight and more efficient in terms of resource usage compared to VMs.
+- Common containerization platforms include Docker and Kubernetes.
+
+In summary, while both technologies enable isolated environments for applications, virtualization uses separate operating systems for each VM, leading to higher resource consumption, whereas containerization shares the host OS kernel, making it more efficient and lightweight.
+
+## Project description 
  1. **Docker Image Setup:**
    - Created Docker images for NGINX, WordPress with php-fpm, and MariaDB.
 
